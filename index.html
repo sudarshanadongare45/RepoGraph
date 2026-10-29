@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoGraph - Repository Architecture Visualizer</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>RepoGraph</h1>
+            <p>Repository Architecture Visualizer</p>
+        </header>
+        
+        <div class="control-panel">
+            <form id="load-form" class="input-group">
+                <input type="text" id="repo-input" placeholder="Enter Local Path (e.g. C:\repo) or GitHub URL..." required>
+                <button type="submit" id="load-btn">Load Repository</button>
+            </form>
+            <div id="status-message"></div>
+        </div>
+
+        <div class="main-content">
+            <div id="graph-container">
+                <!-- D3 Graph will be rendered here -->
+                <div class="placeholder-text">Enter a repository to start visualizing its architecture.</div>
+                
+                <!-- Zoom Controls -->
+                <div class="zoom-controls">
+                    <button id="zoom-in" title="Zoom In">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                    <button id="zoom-out" title="Zoom Out">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                    <button id="zoom-reset" title="Reset View">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item"><span class="color-box repo"></span> Repository</div>
+                <div class="legend-item"><span class="color-box branch"></span> Branch</div>
+                <div class="legend-item"><span class="color-box folder"></span> Folder</div>
+                <div class="legend-item"><span class="color-box file"></span> File</div>
+                <div class="legend-item"><span class="color-box special"></span> Important File</div>
+            </div>
+        </div>
+        
+        <!-- Chat Toggle Button -->
+        <button id="chat-toggle-btn" class="chat-toggle-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Ask AI
+        </button>
+
+        <!-- AI Chat Panel -->
+        <div id="chat-panel" class="chat-panel hidden">
+            <div class="chat-header">
+                <h3>Repo AI Assistant</h3>
+                <button id="close-chat-btn" class="close-btn">&times;</button>
+            </div>
+            <div id="chat-history" class="chat-history">
+                <div class="message assistant-message">
+                    Hello! I'm your AI Assistant. Load a repository, and ask me to summarize it, explain the tech stack, or answer questions about the code!
+                </div>
+            </div>
+            <form id="chat-form" class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about this repo..." disabled autocomplete="off">
+                <button type="submit" id="chat-send-btn" disabled>Send</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- File Viewer Modal -->
+    <div id="file-viewer-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-file-name">file_name.py</h3>
+                <button id="close-modal-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <pre><code id="modal-file-content"></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
